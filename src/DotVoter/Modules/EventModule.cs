@@ -1,4 +1,5 @@
-﻿using DotVoter.Models;
+﻿using DotVoter.Infrastructure;
+using DotVoter.Models;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Responses;
@@ -9,11 +10,13 @@ namespace DotVoter.Modules
     public class EventModule : NancyModule
     {
         private readonly WorkshopEventRepository _eventRepository;
+        private readonly ICounterGenerator _counterGenerator;
 
-        public EventModule(WorkshopEventRepository eventRepository)
+        public EventModule(WorkshopEventRepository eventRepository,ICounterGenerator counterGenerator)
             : base("/event")
         {
             _eventRepository = eventRepository;
+            _counterGenerator = counterGenerator;
             Post["/"] = _ =>
                 {
                     var e = SaveEvent();
@@ -31,6 +34,8 @@ namespace DotVoter.Modules
         private WorkShopEvent SaveEvent()
         {
             var wsevent = this.Bind<WorkShopEvent>();
+            wsevent.WorshopEventId = _counterGenerator.GenerateId<WorkShopEvent>(wsevent);
+
             _eventRepository.Add(wsevent);
             return wsevent;
         }

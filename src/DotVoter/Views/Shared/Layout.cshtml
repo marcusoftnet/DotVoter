@@ -1,3 +1,6 @@
+﻿﻿@using Nancy;
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+
 <!doctype html>
 <html>
   <head>
@@ -24,8 +27,34 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../content/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../content/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="../content/ico/apple-touch-icon-57-precomposed.png">
+      
+      
 
     <link rel="stylesheet" href="/content/css/dotVoter.css">
+    <style type="text/css">
+        * {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .topics {
+            overflow: hidden;
+        }
+
+        .topic {
+            width: 45%;
+            float: left;
+            display: inline-block;
+            border: solid 1px hotpink;
+            border-radius: 2px;
+            margin: 10px;
+            min-height: 100px;
+            min-width: 200px;
+            padding: 10px;
+        }
+    </style>
+
   </head>
 
     <body>
@@ -51,21 +80,9 @@
     </div>
 
         <div class="container">
-
-            <h2>Create new event</h2>
-            <p>Create your own event to start gathering ideas and votes!</p>
-            <form method="post" action="/event" class="form-horizontal">
-                <label for="name">Event name:</label>
-                <input type="text" name="name" id="name">
-                <br />
-                <label for="maxVotes">Max votes:</label>
-                <input type="text" name="maxVotes" id="maxVotes" value="3" />
-                <br />
-                   <button type="submit" class="btn btn-primary" value="add">
-                        <i class="icon-plus icon-white"></i>Add event
-                    </button>
-                  
-            </form>
+          <div class="content">
+            @RenderBody()
+        </div>
         </div>
 
     </body>

@@ -6,6 +6,7 @@ namespace DotVoter.Models
 
     public class WorkShopEvent : Entity
     {
+        public int WorshopEventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int MaxVotes { get; set; }

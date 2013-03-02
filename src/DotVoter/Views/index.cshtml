@@ -1,0 +1,20 @@
+﻿﻿@using Nancy
+@using System.Linq
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+@{
+    Layout = "Views/Shared/Layout.cshtml";
+}
+
+<h2>Create new event</h2>
+<p>Create your own event to start gathering ideas and votes!</p>
+<form method="post" action="/event" class="form-horizontal">
+    <label for="name">Event name:</label>
+    <input type="text" name="name" id="name">
+    <br />
+    <label for="maxVotes">Max votes:</label>
+    <input type="text" name="maxVotes" id="maxVotes" value="3" />
+    <br />
+        <button type="submit" class="btn btn-primary" value="add">
+            <i class="icon-plus icon-white"></i>Add event
+        </button>                  
+</form>
