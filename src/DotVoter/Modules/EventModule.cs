@@ -38,8 +38,4 @@ namespace DotVoter.Modules
             return wsevent;
         }
     }
-
-    public class WorkshopEventRepository : MongoRepository<WorkShopEvent>
-    {
-    }
 }

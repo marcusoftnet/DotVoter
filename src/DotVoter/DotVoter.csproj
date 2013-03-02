@@ -103,6 +103,7 @@
     <Compile Include="Infrastructure\MongoRepository.cs" />
     <Compile Include="Infrastructure\NancyBootstrapper.cs" />
     <Compile Include="Infrastructure\StructureMapContainer.cs" />
+    <Compile Include="Infrastructure\WorkshopEventRepository.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Models\WorkShopEvent.cs" />
     <Compile Include="Modules\EventModule.cs" />
