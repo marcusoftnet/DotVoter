@@ -15,7 +15,11 @@ namespace DotVoter.Modules
             : base("/event")
         {
             _eventRepository = eventRepository;
+<<<<<<< HEAD
             _identityGenerator = identityGenerator;
+=======
+            _counterGenerator = counterGenerator;
+>>>>>>> b8545619307c35a207958896f0bc9a30889d856f
 
 
             Post["/"] = _ =>

@@ -1,4 +1,4 @@
-﻿using MongoRepository;
+using MongoRepository;
 using DotVoter.Models;
 
 namespace DotVoter.Infrastructure
