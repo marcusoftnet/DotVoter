@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DotVoter.Models;
-using MongoRepository;
+using DotVoter.Infrastructure;
+using StructureMap;
 
 namespace DotVoter
 {
@@ -8,6 +9,13 @@ namespace DotVoter
     {
         public void Test()
         {
+            var container = ObjectFactory.Container;
+
+                container.Configure(config => config.For<IIdentityGenerator>().Use<IdentityGenerator>());
+
+            NancyBootstrapper.RegisterMongoMappings(container);
+
+
             var repo = new MongoRepository<WorkShopEvent>();
 
             // adding new entity

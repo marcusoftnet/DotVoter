@@ -4,9 +4,9 @@ using MongoRepository;
 namespace DotVoter.Models
 {
 
-    public class WorkShopEvent : Entity
+    public class WorkShopEvent
     {
-        public int WorshopEventId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int MaxVotes { get; set; }

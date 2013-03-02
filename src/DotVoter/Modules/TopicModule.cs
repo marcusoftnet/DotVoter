@@ -14,13 +14,13 @@ namespace DotVoter.Modules
     public class TopicModule : NancyModule
     {
         private readonly WorkshopEventRepository _eventRepository;
-        private readonly ICounterGenerator _counterGenerator;
+        private readonly IIdentityGenerator _identityGenerator;
 
-        public TopicModule(WorkshopEventRepository eventRepository, ICounterGenerator counterGenerator)
+        public TopicModule(WorkshopEventRepository eventRepository, IIdentityGenerator identityGenerator)
             : base("/event/{id}/topic")
         {
             _eventRepository = eventRepository;
-            _counterGenerator = counterGenerator;
+            _identityGenerator = identityGenerator;
             Post["/"] = p =>
                 {
                     SaveTopic(p.Id);
@@ -32,8 +32,7 @@ namespace DotVoter.Modules
         {
             var wsEvent = _eventRepository.GetById(id);
             var topic = this.Bind<Topic>();
-            topic.Id = ObjectId.GenerateNewId().ToString();
-            topic.TopicId = _counterGenerator.GenerateId<Topic>(topic);
+            topic.Id = _identityGenerator.GenerateId<Topic>(topic);
 
             wsEvent.Topics.Add(topic);
 

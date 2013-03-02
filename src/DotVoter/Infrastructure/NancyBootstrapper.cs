@@ -10,6 +10,7 @@ using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson.Serialization.Options;
 using Nancy;
 using Nancy.Bootstrappers.StructureMap;
+using StructureMap;
 
 namespace DotVoter.Infrastructure
 {
@@ -22,7 +23,7 @@ namespace DotVoter.Infrastructure
 
             protected override void ApplicationStartup(StructureMap.IContainer container, Nancy.Bootstrapper.IPipelines pipelines)
             {
-                RegisterMongoMappings();
+                RegisterMongoMappings(container);
 
                 pipelines.OnError += (context, exception) =>
                 {
@@ -45,22 +46,36 @@ namespace DotVoter.Infrastructure
                 };
             }
 
-        private static void RegisterMongoMappings()
+        public static void RegisterMongoMappings(IContainer container)
         {
             DateTimeSerializationOptions.Defaults = new DateTimeSerializationOptions(DateTimeKind.Local);
 
-            if (!BsonClassMap.IsClassMapRegistered(typeof (Topic)))
-            {
-                BsonClassMap.RegisterClassMap<Topic>(a =>
-                    {
-                        a.AutoMap();
-                    //  a.SetIdMember(a.GetMemberMap(x => x.TopicId).SetIdGenerator(new IntIdGenerator()));
-                    });
-            }
-            if (!BsonClassMap.IsClassMapRegistered(typeof (Vote)))
+
+            BsonSerializer.RegisterIdGenerator(typeof(int), container.GetInstance<IIdentityGenerator>() as IIdGenerator);
+
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(Vote)))
             {
                 BsonClassMap.RegisterClassMap<Vote>(a => a.AutoMap());
             }
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(Topic)))
+            {
+                BsonClassMap.RegisterClassMap<Topic>(a =>
+                {
+                    a.AutoMap();
+                    a.MapIdMember(c => c.Id).SetIsRequired(true);
+                });
+            }
+            if (!BsonClassMap.IsClassMapRegistered(typeof(WorkShopEvent)))
+            {
+                BsonClassMap.RegisterClassMap<WorkShopEvent>(a =>
+                {
+                    a.AutoMap();
+                    a.SetIdMember(a.GetMemberMap(x => x.Id));//.SetIdGenerator(new IntIdGenerator()));
+                });
+            }
+
         }
         }
 }

@@ -100,7 +100,7 @@
     <Compile Include="Infrastructure\Counter.cs" />
     <Compile Include="Infrastructure\CounterGenerator.cs" />
     <Compile Include="Infrastructure\EventNotFoundExeption.cs" />
-    <Compile Include="Infrastructure\IntIdGenerator.cs" />
+    <Compile Include="Infrastructure\MongoRepository.cs" />
     <Compile Include="Infrastructure\NancyBootstrapper.cs" />
     <Compile Include="Infrastructure\StructureMapContainer.cs" />
     <Compile Include="Modules\HomeModule.cs" />

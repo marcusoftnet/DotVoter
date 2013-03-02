@@ -6,11 +6,11 @@ namespace DotVoter.Infrastructure
     {
         public static void Configure(IContainer container)
         {
-            container.Configure(config => config.Scan(c =>
-                {
-                    c.TheCallingAssembly();
-                    c.WithDefaultConventions();
-                }));
+        container.Configure(config => config.Scan(c =>
+            {
+                c.TheCallingAssembly();
+                c.WithDefaultConventions();
+            }));
         }
     }
 }

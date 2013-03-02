@@ -3,20 +3,19 @@ using DotVoter.Models;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Responses;
-using MongoRepository;
 
 namespace DotVoter.Modules
 {
     public class EventModule : NancyModule
     {
         private readonly WorkshopEventRepository _eventRepository;
-        private readonly ICounterGenerator _counterGenerator;
+        private readonly IIdentityGenerator _identityGenerator;
 
-        public EventModule(WorkshopEventRepository eventRepository,ICounterGenerator counterGenerator)
+        public EventModule(WorkshopEventRepository eventRepository,IIdentityGenerator identityGenerator)
             : base("/event")
         {
             _eventRepository = eventRepository;
-            _counterGenerator = counterGenerator;
+            _identityGenerator = identityGenerator;
             Post["/"] = _ =>
                 {
                     var e = SaveEvent();
@@ -26,7 +25,7 @@ namespace DotVoter.Modules
             Get["/{id}"] = p => View["event", GetWsEvent(p.Id)];
         }
 
-        private WorkShopEvent GetWsEvent(string id)
+        private WorkShopEvent GetWsEvent(int id)
         {
             return _eventRepository.GetById(id);
         }
@@ -34,12 +33,13 @@ namespace DotVoter.Modules
         private WorkShopEvent SaveEvent()
         {
             var wsevent = this.Bind<WorkShopEvent>();
-            wsevent.WorshopEventId = _counterGenerator.GenerateId<WorkShopEvent>(wsevent);
-
+           
             _eventRepository.Add(wsevent);
             return wsevent;
         }
     }
 
-    public class WorkshopEventRepository : MongoRepository<WorkShopEvent> { }
+    public class WorkshopEventRepository : MongoRepository<WorkShopEvent>
+    {
+    }
 }
