@@ -17,6 +17,8 @@ namespace DotVoter.Modules
         {
             _eventRepository = eventRepository;
             _counterGenerator = counterGenerator;
+
+
             Post["/"] = _ =>
                 {
                     var e = SaveEvent();
@@ -39,7 +41,5 @@ namespace DotVoter.Modules
             _eventRepository.Add(wsevent);
             return wsevent;
         }
-    }
-
-    public class WorkshopEventRepository : MongoRepository<WorkShopEvent> { }
+    }    
 }
