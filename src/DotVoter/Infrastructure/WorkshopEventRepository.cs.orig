@@ -1,0 +1,16 @@
+<<<<<<< HEAD
+﻿using MongoRepository;
+using DotVoter.Models;
+
+namespace DotVoter.Infrastructure
+{
+    public class WorkshopEventRepository : MongoRepository<WorkShopEvent> { }
+=======
+﻿using MongoRepository;
+using DotVoter.Models;
+
+namespace DotVoter.Infrastructure
+{
+    public class WorkshopEventRepository : MongoRepository<WorkShopEvent> { }
+>>>>>>> b8545619307c35a207958896f0bc9a30889d856f
+}
