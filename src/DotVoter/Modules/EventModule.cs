@@ -1,4 +1,5 @@
-﻿using DotVoter.Infrastructure;
+﻿using System;
+using DotVoter.Infrastructure;
 using DotVoter.Models;
 using Nancy;
 using Nancy.ModelBinding;
@@ -33,7 +34,7 @@ namespace DotVoter.Modules
         private WorkShopEvent SaveEvent()
         {
             var wsevent = this.Bind<WorkShopEvent>();
-           
+            wsevent.CreatedDate = DateTime.Now;
             _eventRepository.Add(wsevent);
             return wsevent;
         }

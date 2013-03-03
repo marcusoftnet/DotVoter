@@ -45,11 +45,18 @@
                                 <header><h2>@t.Name</h2></header>
                                <section>
                                    <p>@t.Category</p>
-                               <form method="post" action="/event/@Model.Id/topic/@t.Id/vote" >
-                                   <button type="submit" value="vote" class="btn btn-primary btn-small" >
-                                       <i class="icon-heart icon-white"></i> Vote
-                                   </button>
-                               </form>
+                                   <form method="post" action="/event/@Model.Id/topic/@t.Id/vote" >
+                                       <button type="submit" value="vote" class="btn btn-primary btn-small" >
+                                           <i class="icon-heart icon-white"></i> Vote
+                                       </button>
+                                   </form>
+                                   <ul class="empty-list">
+                                       
+                                    @foreach (var v in @t.Votes)
+                                    {
+                                        <li title="Unvote"><a href="/event/@Model.Id/topic/@t.Id/unvote"><span class="badge badge-important"><i class="icon-star-empty icon-white"></i></span></a></li>                                    
+                                    }
+                                    </ul>
                                </section>
 
                                

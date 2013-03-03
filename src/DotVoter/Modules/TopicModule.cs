@@ -31,6 +31,29 @@ namespace DotVoter.Modules
                     Vote(p);
                     return new RedirectResponse("/event/" + p.Id);
                 };
+
+            Get["/{topicid}/unvote"] = p =>
+            {
+                UnVote(p);
+                return new RedirectResponse("/event/" + p.Id);
+            };
+        }
+
+        private void UnVote(dynamic p)
+        {
+            var topicId = p["topicid"];
+            var uniqueId = this.Request.Cookies.FirstOrDefault(k => k.Key == "NCSRF").Value;
+            var wsEvent = GetWorkShopEventById((int)p["id"]);
+  
+            var voteToRemove =   wsEvent.Topics.FirstOrDefault(t => t.Id == topicId).Votes.FirstOrDefault(c=>c.UserIdentfier == uniqueId);
+            if (voteToRemove != null)
+            {
+                var topic = wsEvent.Topics.FirstOrDefault(t => t.Id == topicId);
+                if (topic != null)
+                    topic.Votes.Remove(voteToRemove);
+            }
+            Update(wsEvent);
+  
         }
 
         private void Vote(dynamic p)

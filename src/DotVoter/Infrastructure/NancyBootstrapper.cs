@@ -75,7 +75,7 @@ namespace DotVoter.Infrastructure
                 BsonClassMap.RegisterClassMap<WorkShopEvent>(a =>
                 {
                     a.AutoMap();
-                    a.SetIdMember(a.GetMemberMap(x => x.Id));//.SetIdGenerator(new IntIdGenerator()));
+                    a.SetIdMember(a.GetMemberMap(x => x.Id));
                 });
             }
 
