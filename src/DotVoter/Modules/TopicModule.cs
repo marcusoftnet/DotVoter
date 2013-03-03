@@ -26,6 +26,13 @@ namespace DotVoter.Modules
                     SaveTopic(p.Id);
                     return new RedirectResponse("/event/" + p.Id);
                 };
+            
+            Post["/{topicid}/delete"] = p =>
+            {
+                DeletTopic(p);
+                return new RedirectResponse("/event/" + p.Id);
+            };
+
             Post["/{topicid}/vote"] = p =>
                 {
                     Vote(p);
@@ -37,6 +44,21 @@ namespace DotVoter.Modules
                 UnVote(p);
                 return new RedirectResponse("/event/" + p.Id);
             };
+        }
+
+        private void DeletTopic(dynamic p)
+        {
+            var topicId = p["topicid"];
+            var wsEvent = GetWorkShopEventById((int)p["id"]);
+
+            var topicToRemove = wsEvent.Topics.FirstOrDefault(t => t.Id == topicId);
+            if (topicToRemove != null)
+            {
+                var topic = wsEvent.Topics.FirstOrDefault(t => t.Id == topicId);
+                if (topic != null)
+                    wsEvent.Topics.Remove(topicToRemove);
+            }
+            Update(wsEvent);
         }
 
         private void UnVote(dynamic p)
