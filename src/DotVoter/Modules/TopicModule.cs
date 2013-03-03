@@ -26,18 +26,47 @@ namespace DotVoter.Modules
                     SaveTopic(p.Id);
                     return new RedirectResponse("/event/" + p.Id);
                 };
+            Post["/{topicid}/vote"] = p =>
+                {
+                    Vote(p);
+                    return new RedirectResponse("/event/" + p.Id);
+                };
         }
 
-        private void SaveTopic(string id)
+        private void Vote(dynamic p)
         {
-            var wsEvent = _eventRepository.GetById(id);
+            var topicId = p["topicid"];
+            var uniqueId = this.Request.Cookies.FirstOrDefault(k=>k.Key =="NCSRF" ).Value;
+            var wsEvent = GetWorkShopEventById((int) p["id"]);
+            var vote = new Vote();
+
+            vote.Id = _identityGenerator.GenerateId<Vote>(vote);
+            vote.UserIdentfier = uniqueId;
+            wsEvent.Topics.FirstOrDefault(t=>t.Id == topicId).Votes.Add(vote);
+            Update(wsEvent);
+        }
+
+        private void SaveTopic(int id)
+        {
+            var wsEvent = GetWorkShopEventById(id);
             var topic = this.Bind<Topic>();
+            
             topic.Id = _identityGenerator.GenerateId<Topic>(topic);
+            topic.WorkshopEventId = id;
+            topic.CreatedDate = DateTime.Now;
 
             wsEvent.Topics.Add(topic);
+            Update(wsEvent);
+        }
 
+        private void Update(WorkShopEvent wsEvent)
+        {
             _eventRepository.Update(wsEvent);
+        }
 
+        private WorkShopEvent GetWorkShopEventById(int id)
+        {
+            return _eventRepository.GetById(id);
         }
     }
 }

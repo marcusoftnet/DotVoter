@@ -10,6 +10,7 @@ using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson.Serialization.Options;
 using Nancy;
 using Nancy.Bootstrappers.StructureMap;
+using Nancy.Session;
 using StructureMap;
 
 namespace DotVoter.Infrastructure
@@ -24,6 +25,8 @@ namespace DotVoter.Infrastructure
             protected override void ApplicationStartup(StructureMap.IContainer container, Nancy.Bootstrapper.IPipelines pipelines)
             {
                 RegisterMongoMappings(container);
+
+                CookieBasedSessions.Enable(pipelines);
 
                 pipelines.OnError += (context, exception) =>
                 {

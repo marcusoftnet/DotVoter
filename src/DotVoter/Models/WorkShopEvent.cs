@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MongoRepository;
 
@@ -10,6 +11,7 @@ namespace DotVoter.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int MaxVotes { get; set; }
+        public DateTime CreatedDate { get; set; }
 
 
         private List<Topic> _topics;

@@ -109,6 +109,7 @@
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\Vote.cs" />
     <Compile Include="Modules\TopicModule.cs" />
+    <Compile Include="Infrastructure\WorkshopEventRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
