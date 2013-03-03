@@ -41,8 +41,7 @@ namespace DotVoter.Modules
 
             Get["/{topicid}/unvote"] = p =>
             {
-                UnVote(p);
-                return new RedirectResponse("/event/" + p.Id);
+               return UnVote(p);
             };
         }
 
@@ -61,20 +60,25 @@ namespace DotVoter.Modules
             Update(wsEvent);
         }
 
-        private void UnVote(dynamic p)
+        private RedirectResponse UnVote(dynamic p)
         {
             var topicId = p["topicid"];
             var uniqueId = this.Request.Cookies.FirstOrDefault(k => k.Key == "NCSRF").Value;
             var wsEvent = GetWorkShopEventById((int)p["id"]);
   
             var voteToRemove =   wsEvent.Topics.FirstOrDefault(t => t.Id == topicId).Votes.FirstOrDefault(c=>c.UserIdentfier == uniqueId);
-            if (voteToRemove != null)
-            {
-                var topic = wsEvent.Topics.FirstOrDefault(t => t.Id == topicId);
-                if (topic != null)
-                    topic.Votes.Remove(voteToRemove);
-            }
+            if (voteToRemove == null)
+                return new RedirectResponse(this.Request.Headers.Referrer);
+         
+            var topic = wsEvent.Topics.FirstOrDefault(t => t.Id == topicId);
+             if (topic == null)
+                 return new RedirectResponse(this.Request.Headers.Referrer);
+ 
+            topic.Votes.Remove(voteToRemove);
+            
             Update(wsEvent);
+
+            return new RedirectResponse("/event/" + p.Id);
   
         }
 
