@@ -45,17 +45,32 @@
                            <div class="widget topic">
                                 <header><h2>@t.Name</h2></header>
                                <section>
-                                   <p>@t.Category</p>
-                                   <form method="post" action="/event/@Model.Id/topic/@t.Id/vote" >
+                                 <div class="btn-toolbar" style="margin: 0;">
+                                   <div class="btn-group">
+                                    <form method="post" action="/event/@Model.Id/topic/@t.Id/vote" class="pull-left" style="margin:0;padding:0px 0px 0px 0px;"  >
                                        <button type="submit" value="vote" class="btn btn-primary btn-small" >
                                            <i class="icon-heart icon-white"></i> Vote
                                        </button>
                                    </form>
+                                  </div>                     
+                                  <div class="btn-group">
+                                   <span ></span>
+                                </div>
+                                <div class="btn-group">
+                                    <form method="post" action="/event/@Model.Id/topic/@t.Id/delete" class="pull-right" style="margin:0;padding:0px 0px 0px 0px;"  >
+                                       <button type="submit" value="vote" class="btn btn-small" >
+                                           <i class="icon-minus"></i> Delete
+                                       </button>
+                                   </form>
+                                  </div>                     
+                                </div>
+                               <hr/>
+                                   <p>@t.Category</p>
                                    <ul class="empty-list">
                                        
                                     @foreach (var v in @t.Votes)
                                     {
-                                        <li title="Unvote"><a href="/event/@Model.Id/topic/@t.Id/unvote"><span class="badge badge-important"><i class="icon-star-empty icon-white"></i></span></a></li>                                    
+                                        <li title="Unvote"><a href="/event/@Model.Id/topic/@t.Id/unvote"><span class="badge badge-success"><i class="icon-star-empty icon-white"></i></span></a></li>                                    
                                     }
                                     </ul>
                                </section>
