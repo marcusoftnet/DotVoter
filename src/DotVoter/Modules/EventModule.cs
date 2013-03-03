@@ -22,8 +22,9 @@ namespace DotVoter.Modules
                     var e = SaveEvent();
                     return new RedirectResponse("/event/" + e.Id);
                 };
-
-            Get["/{id}"] = p => View["event", GetWsEvent(p.Id)];
+            Get[@"/(?<id>[\d]+)"] = p => View["event", GetWsEvent(p.Id)];
+            
+            Get[@"/{id}/sorted"] = p => View["event", GetWsEventWithTopicsSortedByNumberOfVotes(p.Id)];
         }
 
         private WorkShopEvent GetWsEvent(int id)
@@ -37,6 +38,14 @@ namespace DotVoter.Modules
             wsevent.CreatedDate = DateTime.Now;
             _eventRepository.Add(wsevent);
             return wsevent;
+        }
+
+        private WorkShopEvent GetWsEventWithTopicsSortedByNumberOfVotes(int id)
+        {
+            var wsEvent = GetWsEvent(id);
+       
+            wsEvent.Topics.SortDescending(t => t.Votes.Count);
+            return wsEvent;
         }
     }
 }

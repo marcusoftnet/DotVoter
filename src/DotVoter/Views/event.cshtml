@@ -35,7 +35,8 @@
         <div class="row-fluid">
                     <div class="span12">
         
-<h3>Topics in Event @Model.Name, so far:</h3>
+<h3>Topics in Event @Model.Name, so far:</h3><h4><a href="/event/@Model.Id/sorted" >Sorted</a></h4>
+
                 <section class="topics">
                 @foreach (var t in @Model.Topics)
                 {
