@@ -43,13 +43,12 @@
         }
 
         .topic {
-            width: 45%;
+            width: 100%;
             float: left;
             display: inline-block;
             border-radius: 2px;
             margin: 10px;
-            min-height: 100px;
-            min-width: 200px;
+            min-height: 250px;
             padding: 10px;
         }
        
@@ -147,7 +146,37 @@
 }
 
 
+.content {
+    max-width: 960px;
+}
 
+@@media (min-width: 400px) {
+
+    .topic {
+        width: 50%;
+    }
+
+}
+
+@@media (min-width: 900px) {
+
+    .topic {
+        width: 33%;
+    }
+
+}
+/*
+.item-shadow {
+    box-shadow: 3px 4px 5px rgb(228, 228, 228);
+    -webkit-transform:rotate(2deg);
+
+}
+
+.row-fluid article:nth-child(2) {
+   -webkit-transform:rotate(-2deg);
+}
+
+*/
 
     </style>
 
@@ -179,10 +208,8 @@
         </div>
     </div>
 
-        <div class="container">
           <div class="content">
             @RenderBody()
-        </div>
         </div>
 
     </body>

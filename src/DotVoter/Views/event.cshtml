@@ -38,51 +38,53 @@
 <h3>Topics in Event @Model.Name, so far:</h3><h4><a href="/event/@Model.Id/sorted" >Sorted</a></h4>
 
                 <section class="topics">
-                @foreach (var t in @Model.Topics)
+                    <div class="row-fluid">
+                 
+                    @foreach (var t in @Model.Topics)
                 {
-                 <div class="row-fluid">
                        <article>
                            <div class="widget topic">
-                                <header><h2>@t.Name</h2></header>
+                               <div class="item-shadow">
+                               <header><h2>@t.Name</h2></header>
                                <section>
-                                 <div class="btn-toolbar" style="margin: 0;">
-                                   <div class="btn-group">
-                                    <form method="post" action="/event/@Model.Id/topic/@t.Id/vote" class="pull-left" style="margin:0;padding:0px 0px 0px 0px;"  >
-                                       <button type="submit" value="vote" class="btn btn-primary btn-small" >
-                                           <i class="icon-heart icon-white"></i> Vote
-                                       </button>
-                                   </form>
-                                  </div>                     
-                                  <div class="btn-group">
-                                   <span ></span>
-                                </div>
-                                <div class="btn-group">
-                                    <form method="post" action="/event/@Model.Id/topic/@t.Id/delete" class="pull-right" style="margin:0;padding:0px 0px 0px 0px;"  >
-                                       <button type="submit" value="vote" class="btn btn-small" >
-                                           <i class="icon-minus"></i> Delete
-                                       </button>
-                                   </form>
-                                  </div>                     
-                                </div>
-                               <hr/>
-                                   <p>@t.Category</p>
+                                   <div class="btn-toolbar" style="margin: 0;">
+                                       <div class="btn-group">
+                                           <form method="post" action="/event/@Model.Id/topic/@t.Id/vote" class="pull-left" style="margin:0;padding:0px 0px 0px 0px;"  >
+                                               <button type="submit" value="vote" class="btn btn-primary btn-small" >
+                                                   <i class="icon-heart icon-white"></i> Vote
+                                               </button>
+                                           </form>
+                                       </div>                     
+                                       <div class="btn-group">
+                                           <span ></span>
+                                       </div>
+                                       <div class="btn-group">
+                                           <form method="post" action="/event/@Model.Id/topic/@t.Id/delete" class="pull-right" style="margin:0;padding:0px 0px 0px 0px;"  >
+                                               <button type="submit" value="vote" class="btn btn-small" >
+                                                   <i class="icon-minus"></i> Delete
+                                               </button>
+                                           </form>
+                                       </div>                     
+                                   </div>
+                                   <hr/>
+                                   <p><strong>Category: </strong>@t.Category</p>
                                    <ul class="empty-list">
                                        
-                                    @foreach (var v in @t.Votes)
-                                    {
-                                        <li title="Unvote"><a href="/event/@Model.Id/topic/@t.Id/unvote"><span class="badge badge-success"><i class="icon-star-empty icon-white"></i></span></a></li>                                    
-                                    }
-                                    </ul>
+                                       @foreach (var v in @t.Votes)
+                                       {
+                                           <li title="Unvote"><a href="/event/@Model.Id/topic/@t.Id/unvote"><span class="badge badge-success"><i class="icon-star-empty icon-white"></i></span></a></li>                                    
+                                       }
+                                   </ul>
                                </section>
 
-                               
+                               </div>
+                           </div>
 
-                            </div>
                         </article>
-                </div>
                  
                 }
-            
+            </div>
+        
       
             </section>
         </div>
