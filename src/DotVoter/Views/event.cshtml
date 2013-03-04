@@ -4,32 +4,91 @@
 @{
     Layout = "Views/Shared/Layout.cshtml";
 }
-        <h1>Event: @Model.Name</h1>
-        <h2>Create new topic:</h2>
-        <div class="hero-unit">
-            <div>
-  
-                    <form method="post" action="/event/@Model.Id/topic" class="form-horizontal">
-                        <label for="name">Topic name:</label>
-                        <input type="text" name="name" id="name">
-                        <label for="category">Cateory (optional):</label>
-                        <input type="text" name="category" id="category" value="Idea" />
-                        <br />
+
+<h1>Event: @Model.Name</h1>
+<h2>Create new topic:</h2>
+<div class="container-fluid">
+    <div class="row-fluid">
+        
+     
+        <div class="span12">
+            
+            <div >
+                
+                <form method="post" action="/event/@Model.Id/topic" class="form-horizontal well">
+                    <label for="name">Topic name:</label>
+                    <input type="text" name="name" id="name">
+                    <label for="category">Cateory (optional):</label>
+                    <input type="text" name="category" id="category" value="Idea" />
+                    <br />
                        
-                     <button type="submit" class="btn btn-primary" value="add">
+                    <button type="submit" class="btn btn-primary" value="add">
                         <i class="icon-plus icon-white"></i>Add topic
                     </button>
-                    </form>
-                    <hr />
-                    <h3>Topics in Event @Model.Name, so far:</h3>
-                    <section class="topics">
-                        @foreach (var t in @Model.Topics)
-                        {
-                            <article class="topic">
-                                <h2>@t.Name</h2>
-                                <p>@t.Category</p>
-                            </article>
-                        }
-                    </section>
+                </form>
             </div>
+
         </div>
+        <hr />
+    
+
+        <div class="row-fluid">
+                    <div class="span12">
+        
+<h3>Topics in Event @Model.Name, so far:</h3><h4><a href="/event/@Model.Id/sorted" >Sorted</a></h4>
+
+                <section class="topics">
+                    <div class="row-fluid">
+                 
+                    @foreach (var t in @Model.Topics)
+                {
+                       <article>
+                           <div class="widget topic">
+                               <div class="item-shadow">
+                               <header><h2>@t.Name</h2></header>
+                               <section>
+                                   <div class="btn-toolbar" style="margin: 0;">
+                                       <div class="btn-group">
+                                           <form method="post" action="/event/@Model.Id/topic/@t.Id/vote" class="pull-left" style="margin:0;padding:0px 0px 0px 0px;"  >
+                                               <button type="submit" value="vote" class="btn btn-primary btn-small" >
+                                                   <i class="icon-heart icon-white"></i> Vote
+                                               </button>
+                                           </form>
+                                       </div>                     
+                                       <div class="btn-group">
+                                           <span ></span>
+                                       </div>
+                                       <div class="btn-group">
+                                           <form method="post" action="/event/@Model.Id/topic/@t.Id/delete" class="pull-right" style="margin:0;padding:0px 0px 0px 0px;"  >
+                                               <button type="submit" value="vote" class="btn btn-small" >
+                                                   <i class="icon-minus"></i> Delete
+                                               </button>
+                                           </form>
+                                       </div>                     
+                                   </div>
+                                   <hr/>
+                                   <p><strong>Category: </strong>@t.Category</p>
+                                   <ul class="empty-list">
+                                       
+                                       @foreach (var v in @t.Votes)
+                                       {
+                                           <li title="Unvote"><a href="/event/@Model.Id/topic/@t.Id/unvote"><span class="badge badge-success"><i class="icon-star-empty icon-white"></i></span></a></li>                                    
+                                       }
+                                   </ul>
+                               </section>
+
+                               </div>
+                           </div>
+
+                        </article>
+                 
+                }
+            </div>
+        
+      
+            </section>
+        </div>
+        </div>
+
+</div></div>
+           

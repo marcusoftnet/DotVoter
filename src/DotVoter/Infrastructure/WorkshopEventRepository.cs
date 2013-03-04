@@ -1,7 +1,8 @@
-﻿using MongoRepository;
-using DotVoter.Models;
+﻿using DotVoter.Models;
 
 namespace DotVoter.Infrastructure
 {
-    public class WorkshopEventRepository : MongoRepository<WorkShopEvent> { }
+    public class WorkshopEventRepository : MongoRepository<WorkShopEvent>
+    {
+    }
 }

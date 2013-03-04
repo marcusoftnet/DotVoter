@@ -1,4 +1,5 @@
-﻿using DotVoter.Infrastructure;
+﻿using System;
+using DotVoter.Infrastructure;
 using DotVoter.Models;
 using Nancy;
 using Nancy.ModelBinding;
@@ -15,11 +16,7 @@ namespace DotVoter.Modules
             : base("/event")
         {
             _eventRepository = eventRepository;
-<<<<<<< HEAD
             _identityGenerator = identityGenerator;
-=======
-            _counterGenerator = counterGenerator;
->>>>>>> b8545619307c35a207958896f0bc9a30889d856f
 
 
             Post["/"] = _ =>
@@ -27,8 +24,9 @@ namespace DotVoter.Modules
                     var e = SaveEvent();
                     return new RedirectResponse("/event/" + e.Id);
                 };
-
-            Get["/{id}"] = p => View["event", GetWsEvent(p.Id)];
+            Get[@"/(?<id>[\d]+)"] = p => View["event", GetWsEvent(p.Id)];
+            
+            Get[@"/{id}/sorted"] = p => View["event", GetWsEventWithTopicsSortedByNumberOfVotes(p.Id)];
         }
 
         private WorkShopEvent GetWsEvent(int id)
@@ -39,9 +37,18 @@ namespace DotVoter.Modules
         private WorkShopEvent SaveEvent()
         {
             var wsevent = this.Bind<WorkShopEvent>();
-           
+            wsevent.CreatedDate = DateTime.Now;
             _eventRepository.Add(wsevent);
             return wsevent;
         }
-    }    
+
+
+        private WorkShopEvent GetWsEventWithTopicsSortedByNumberOfVotes(int id)
+        {
+            var wsEvent = GetWsEvent(id);
+       
+            wsEvent.Topics.SortDescending(t => t.Votes.Count);
+            return wsEvent;
+        }
+    }
 }
