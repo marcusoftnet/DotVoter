@@ -5,15 +5,15 @@ namespace DotVoterTests
 {
     public class RepositoryTest
     {
-        [Fact]
-        public void MyTest()
-        {
-            var repo = new EventRepoTest();
+        //[Fact]
+        //public void MyTest()
+        //{
+        //    var repo = new EventRepoTest();
 
-            repo.Test();
+        //    repo.Test();
 
 
-            Assert.Equal(4, 2 + 2);
-        }
+        //    Assert.Equal(4, 2 + 2);
+        //}
     }
 }
