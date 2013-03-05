@@ -12,42 +12,48 @@ using Nancy;
 using Nancy.Bootstrappers.StructureMap;
 using Nancy.Session;
 using StructureMap;
+using Nancy.Diagnostics;
 
 namespace DotVoter.Infrastructure
 {
     public class NancyBootstrapper : StructureMapNancyBootstrapper
+    {
+        protected override void ConfigureApplicationContainer(StructureMap.IContainer existingContainer)
         {
-            protected override void ConfigureApplicationContainer(StructureMap.IContainer existingContainer)
+            StructureMapContainer.Configure(existingContainer);
+        }
+
+        protected override DiagnosticsConfiguration DiagnosticsConfiguration
+        {
+            get { return new DiagnosticsConfiguration { Password = @"D0tV0t3r" }; }
+        }
+
+        protected override void ApplicationStartup(StructureMap.IContainer container, Nancy.Bootstrapper.IPipelines pipelines)
+        {
+            RegisterMongoMappings(container);
+
+            CookieBasedSessions.Enable(pipelines);
+
+            pipelines.OnError += (context, exception) =>
             {
-                StructureMapContainer.Configure(existingContainer);
-            }
-
-            protected override void ApplicationStartup(StructureMap.IContainer container, Nancy.Bootstrapper.IPipelines pipelines)
-            {
-                RegisterMongoMappings(container);
-
-                CookieBasedSessions.Enable(pipelines);
-
-                pipelines.OnError += (context, exception) =>
-                {
-                    if (exception is EventNotFoundExeption)
-                        return new Response
+                if (exception is EventNotFoundExeption)
+                    return new Response
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        ContentType = "text/html",
+                        Contents = (stream) =>
                         {
-                            StatusCode = HttpStatusCode.NotFound,
-                            ContentType = "text/html",
-                            Contents = (stream) =>
-                            {
-                                var errorMessage =
-                                    Encoding.UTF8.GetBytes(
-                                        exception.Message);
-                                stream.Write(errorMessage, 0,
-                                             errorMessage.Length);
-                            }
-                        };
+                            var errorMessage =
+                                Encoding.UTF8.GetBytes(
+                                    exception.Message);
+                            stream.Write(errorMessage, 0,
+                                         errorMessage.Length);
+                        }
+                    };
 
-                    return HttpStatusCode.InternalServerError;
-                };
-            }
+                return HttpStatusCode.InternalServerError;
+            };
+        }
 
         public static void RegisterMongoMappings(IContainer container)
         {
@@ -80,5 +86,5 @@ namespace DotVoter.Infrastructure
             }
 
         }
-        }
+    }
 }
