@@ -5,6 +5,7 @@ using System.Web;
 using DotVoter.Infrastructure;
 using DotVoter.Models;
 using MongoDB.Bson;
+using MongoDB.Driver.Builders;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Responses;
@@ -117,5 +118,20 @@ namespace DotVoter.Modules
         {
             return _eventRepository.GetById(id);
         }
+
+        /*
+        private void UpdateChildDocument(Topic topic)
+        {
+            var vote = new Vote();
+            var query = Query.EQ("Topics._id", topic.Id); 
+            var update = Update.Set("Topics.$.Votes", vote); 
+            collection.Update(query, update); 
+
+//You would probably want to do the update based on the student Id 
+//instead of Name, in case there was more than one Mark. 
+        
+
+        }*/
+
     }
 }
