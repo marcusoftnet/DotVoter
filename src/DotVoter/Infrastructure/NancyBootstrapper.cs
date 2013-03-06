@@ -33,26 +33,6 @@ namespace DotVoter.Infrastructure
             RegisterMongoMappings(container);
 
             CookieBasedSessions.Enable(pipelines);
-
-            //pipelines.OnError += (context, exception) =>
-            //{
-            //    if (exception is EventNotFoundExeption)
-            //        return new Response
-            //        {
-            //            StatusCode = HttpStatusCode.NotFound,
-            //            ContentType = "text/html",
-            //            Contents = (stream) =>
-            //            {
-            //                var errorMessage =
-            //                    Encoding.UTF8.GetBytes(
-            //                        exception.Message);
-            //                stream.Write(errorMessage, 0,
-            //                             errorMessage.Length);
-            //            }
-            //        };
-
-            //    return HttpStatusCode.InternalServerError;
-            //};
         }
 
         public static void RegisterMongoMappings(IContainer container)
