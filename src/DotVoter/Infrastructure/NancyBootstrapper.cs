@@ -35,6 +35,7 @@ namespace DotVoter.Infrastructure
             CookieBasedSessions.Enable(pipelines);
 
             StaticConfiguration.EnableRequestTracing = true;
+            StaticConfiguration.DisableErrorTraces = false;
         }
 
         public static void RegisterMongoMappings(IContainer container)
