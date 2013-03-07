@@ -30,7 +30,8 @@ namespace DotVoter.Infrastructure
 
         public MongoRepository()
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["MONGOHQ_URL"].ConnectionString;
+            //var connectionString = ConfigurationManager.ConnectionStrings["MONGOHQ_URL"].ConnectionString;
+            var connectionString = ConfigurationManager.AppSettings.Get("MONGOHQ_URL");
 
             var client = new MongoClient(connectionString); // connect to localhost
             var server = client.GetServer();
