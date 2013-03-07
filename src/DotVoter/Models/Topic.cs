@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using MongoRepository;
 
 namespace DotVoter.Models
 {
