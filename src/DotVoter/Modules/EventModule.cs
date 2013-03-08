@@ -9,7 +9,6 @@ namespace DotVoter.Modules
 {
     public class EventModule : DotVoterModule
     {
-
         public const string CSSActive = "active";
         private readonly WorkshopEventRepository _eventRepository;
         private readonly IIdentityGenerator _identityGenerator;
@@ -33,7 +32,7 @@ namespace DotVoter.Modules
 
         private WorkshopEventViewModel GetWsEvent(int id)
         {
-            return CastToEventViewModel( DisplayModes.Voting,   _eventRepository.GetById(id));
+            return CastToEventViewModel(DisplayModes.Voting, _eventRepository.GetById(id));
         }
 
         private WorkshopEventViewModel SaveEvent()
@@ -42,7 +41,7 @@ namespace DotVoter.Modules
             wsevent.CreatedDate = DateTime.Now;
             _eventRepository.Add(wsevent);
 
-            return CastToEventViewModel(DisplayModes.Voting,  wsevent);
+            return CastToEventViewModel(DisplayModes.Voting, wsevent);
         }
 
 
@@ -55,12 +54,10 @@ namespace DotVoter.Modules
         }
 
 
-
         private WorkshopEventViewModel CastToEventViewModel(DisplayModes mode, IWorkShopEvent source)
         {
-
             var destination = AutoMapper.Mapper.DynamicMap<WorkshopEventViewModel>(source);
-            
+
             destination.CurrentUserIdentifier = CurrentUserIdentifier;
             destination.DisplayMode = mode;
 
@@ -74,10 +71,8 @@ namespace DotVoter.Modules
                 destination.CSSResult = CSSActive;
                 destination.CSSVoting = "";
             }
-            
+
             return destination;
         }
-
-    
     }
 }
