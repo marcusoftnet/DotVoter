@@ -6,13 +6,12 @@ using DotVoter.Infrastructure;
 using DotVoter.Models;
 using MongoDB.Bson;
 using MongoDB.Driver.Builders;
-using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Responses;
 
 namespace DotVoter.Modules
 {
-    public class TopicModule : NancyModule
+    public class TopicModule : DotVoterModule
     {
         private readonly WorkshopEventRepository _eventRepository;
         private readonly IIdentityGenerator _identityGenerator;
@@ -64,10 +63,9 @@ namespace DotVoter.Modules
         private RedirectResponse UnVote(dynamic p)
         {
             var topicId = p["topicid"];
-            var uniqueId = this.Request.Cookies.FirstOrDefault(k => k.Key == "NCSRF").Value;
             var wsEvent = GetWorkShopEventById((int)p["id"]);
   
-            var voteToRemove =   wsEvent.Topics.FirstOrDefault(t => t.Id == topicId).Votes.FirstOrDefault(c=>c.UserIdentfier == uniqueId);
+            var voteToRemove =   wsEvent.Topics.FirstOrDefault(t => t.Id == topicId).Votes.FirstOrDefault(c=>c.UserIdentfier == CurrentUserIdentifier);
             if (voteToRemove == null)
                 return new RedirectResponse(this.Request.Headers.Referrer);
          
@@ -86,12 +84,11 @@ namespace DotVoter.Modules
         private void Vote(dynamic p)
         {
             var topicId = p["topicid"];
-            var uniqueId = this.Request.Cookies.FirstOrDefault(k=>k.Key =="NCSRF" ).Value;
             var wsEvent = GetWorkShopEventById((int) p["id"]);
             var vote = new Vote();
 
             vote.Id = _identityGenerator.GenerateId<Vote>(vote);
-            vote.UserIdentfier = uniqueId;
+            vote.UserIdentfier = CurrentUserIdentifier;
             wsEvent.Topics.FirstOrDefault(t=>t.Id == topicId).Votes.Add(vote);
             Update(wsEvent);
         }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace DotVoter.Models
 {
 
-    public class WorkShopEvent
+    public class WorkShopEvent : IWorkShopEvent
     {
         public int Id { get; set; }
         public string Name { get; set; }

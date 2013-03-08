@@ -1,18 +1,20 @@
 ﻿using System;
 using DotVoter.Infrastructure;
 using DotVoter.Models;
-using Nancy;
+using DotVoter.ViewModels;
 using Nancy.ModelBinding;
 using Nancy.Responses;
 
 namespace DotVoter.Modules
 {
-    public class EventModule : NancyModule
+    public class EventModule : DotVoterModule
     {
+
+        public const string CSSActive = "active";
         private readonly WorkshopEventRepository _eventRepository;
         private readonly IIdentityGenerator _identityGenerator;
 
-        public EventModule(WorkshopEventRepository eventRepository,IIdentityGenerator identityGenerator)
+        public EventModule(WorkshopEventRepository eventRepository, IIdentityGenerator identityGenerator)
             : base("/event")
         {
             _eventRepository = eventRepository;
@@ -25,30 +27,57 @@ namespace DotVoter.Modules
                     return new RedirectResponse("/event/" + e.Id);
                 };
             Get[@"/(?<id>[\d]+)"] = p => View["event", GetWsEvent(p.Id)];
-            
-            Get[@"/{id}/sorted"] = p => View["event", GetWsEventWithTopicsSortedByNumberOfVotes(p.Id)];
+
+            Get[@"/{id}/showresult"] = p => View["event", GetWsEventWithTopicsSortedByNumberOfVotes(p.Id)];
         }
 
-        private WorkShopEvent GetWsEvent(int id)
+        private WorkshopEventViewModel GetWsEvent(int id)
         {
-            return _eventRepository.GetById(id);
+            return CastToEventViewModel( DisplayModes.Voting,   _eventRepository.GetById(id));
         }
 
-        private WorkShopEvent SaveEvent()
+        private WorkshopEventViewModel SaveEvent()
         {
             var wsevent = this.Bind<WorkShopEvent>();
             wsevent.CreatedDate = DateTime.Now;
             _eventRepository.Add(wsevent);
-            return wsevent;
+
+            return CastToEventViewModel(DisplayModes.Voting,  wsevent);
         }
 
 
-        private WorkShopEvent GetWsEventWithTopicsSortedByNumberOfVotes(int id)
+        private WorkshopEventViewModel GetWsEventWithTopicsSortedByNumberOfVotes(int id)
         {
             var wsEvent = GetWsEvent(id);
-       
+
             wsEvent.Topics.SortDescending(t => t.Votes.Count);
-            return wsEvent;
+            return CastToEventViewModel(DisplayModes.ShowResult, wsEvent);
         }
+
+
+
+        private WorkshopEventViewModel CastToEventViewModel(DisplayModes mode, IWorkShopEvent source)
+        {
+
+            var destination = AutoMapper.Mapper.DynamicMap<WorkshopEventViewModel>(source);
+            
+            destination.CurrentUserIdentifier = CurrentUserIdentifier;
+            destination.DisplayMode = mode;
+
+            if (destination.DisplayMode == DisplayModes.Voting)
+            {
+                destination.CSSVoting = CSSActive;
+                destination.CSSResult = "";
+            }
+            else
+            {
+                destination.CSSResult = CSSActive;
+                destination.CSSVoting = "";
+            }
+            
+            return destination;
+        }
+
+    
     }
 }
