@@ -1,6 +1,7 @@
 ﻿﻿@using Nancy
 @using System.Linq
-@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+@using DotVoter.ViewModels;
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<WorkshopEventViewModel>
 @{
     Layout = "Views/Shared/Layout.cshtml";
 }
@@ -84,7 +85,13 @@
                                        
                                         @foreach (var v in @t.Votes)
                                         {
-                                            <li title="Unvote"><a href="/event/@Model.Id/topic/@t.Id/unvote"><span class="badge badge-success"><i class="icon-star-empty icon-white"></i></span></a></li>                                    
+
+                                            if (@Model.CurrentUserIdentifier == v.UserIdentfier || @Model.DisplayMode == DisplayModes.ShowResult)
+                                            {
+                                                <li title="Unvote">   
+                                                    <a href="/event/@Model.Id/topic/@t.Id/unvote/@v.Id"><span class="badge badge-success"><i class="icon-star-empty icon-white"></i></span></a>
+                                                </li>
+                                            }
                                         }
                                     </ul>
                                 </section>

@@ -35,13 +35,14 @@ namespace DotVoter.Modules
 
             Post["/{topicid}/vote"] = p =>
                 {
-                    Vote(p);
+                    AddVoteToTopic(p);
                     return new RedirectResponse("/event/" + p.Id);
                 };
 
-            Get["/{topicid}/unvote"] = p =>
+            Get["/{topicid}/unvote/{voteid}"] = p =>
             {
-               return UnVote(p);
+               RemoveVoteFromTopic(p);
+               return new RedirectResponse("/event/" + p.Id);
             };
         }
 
@@ -64,6 +65,7 @@ namespace DotVoter.Modules
         {
             var topicId = p["topicid"];
             var wsEvent = GetWorkShopEventById((int)p["id"]);
+
   
             var voteToRemove =   wsEvent.Topics.FirstOrDefault(t => t.Id == topicId).Votes.FirstOrDefault(c=>c.UserIdentfier == CurrentUserIdentifier);
             if (voteToRemove == null)
@@ -116,19 +118,58 @@ namespace DotVoter.Modules
             return _eventRepository.GetById(id);
         }
 
-        /*
+        protected void RemoveVoteFromTopic(dynamic p)
+        {
+
+            var topicId = (int) p["topicid"];
+            var wsEventId = (int)p["id"];
+            var vote = new Vote(){Id = (int)p["voteId"],UserIdentfier = CurrentUserIdentifier};
+
+            var query = Query.And(Query.EQ("_id", wsEventId), Query.EQ("Topics._id", topicId));
+
+            var update = MongoDB.Driver.Builders.Update.PullWrapped("Topics.$.Votes", vote);
+
+            _eventRepository.Collection.Update(query, update);
+        }
+
+
+        protected void AddVoteToTopic(dynamic p)
+        {
+            var topicId = (int) p["topicid"];
+            var wsEventId = (int)p["id"];
+            var vote = new Vote();
+            vote.Id = _identityGenerator.GenerateId<Vote>(vote);
+            vote.UserIdentfier = CurrentUserIdentifier;
+           
+            var query = Query.And(Query.EQ("_id", wsEventId), Query.EQ("Topics._id", topicId));
+
+            var update = MongoDB.Driver.Builders.Update.PushAllWrapped("Topics.$.Votes", vote);
+
+            _eventRepository.Collection.Update(query, update);
+        }
+
+
         private void UpdateChildDocument(Topic topic)
         {
-            var vote = new Vote();
-            var query = Query.EQ("Topics._id", topic.Id); 
-            var update = Update.Set("Topics.$.Votes", vote); 
-            collection.Update(query, update); 
+            /*
+            //var vote = new Vote();
+            //var query = Query.EQ("Topics._id", topic.Id); 
+            //Update.Push()
+            //var update = Update.Set("Topics.$.Votes", vote); 
+            //collection.Update(query, update); 
 
 //You would probably want to do the update based on the student Id 
 //instead of Name, in case there was more than one Mark. 
         
+                        // add it as a new attribute because it didn't exist
+            query = Query.EQ("_id", id);
+            update = Update.PushWrapped("bAttributeArray", new BAttribute { attribute = attribute, attributeValue = increment });
+            collection.Update(query, update);
 
-        }*/
+            
+            */
+
+        }
 
     }
 }
