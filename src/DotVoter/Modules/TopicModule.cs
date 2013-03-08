@@ -61,40 +61,7 @@ namespace DotVoter.Modules
             Update(wsEvent);
         }
 
-        private RedirectResponse UnVote(dynamic p)
-        {
-            var topicId = p["topicid"];
-            var wsEvent = GetWorkShopEventById((int)p["id"]);
-
-  
-            var voteToRemove =   wsEvent.Topics.FirstOrDefault(t => t.Id == topicId).Votes.FirstOrDefault(c=>c.UserIdentfier == CurrentUserIdentifier);
-            if (voteToRemove == null)
-                return new RedirectResponse(this.Request.Headers.Referrer);
-         
-            var topic = wsEvent.Topics.FirstOrDefault(t => t.Id == topicId);
-             if (topic == null)
-                 return new RedirectResponse(this.Request.Headers.Referrer);
- 
-            topic.Votes.Remove(voteToRemove);
-            
-            Update(wsEvent);
-
-            return new RedirectResponse("/event/" + p.Id);
-  
-        }
-
-        private void Vote(dynamic p)
-        {
-            var topicId = p["topicid"];
-            var wsEvent = GetWorkShopEventById((int) p["id"]);
-            var vote = new Vote();
-
-            vote.Id = _identityGenerator.GenerateId<Vote>(vote);
-            vote.UserIdentfier = CurrentUserIdentifier;
-            wsEvent.Topics.FirstOrDefault(t=>t.Id == topicId).Votes.Add(vote);
-            Update(wsEvent);
-        }
-
+        
         private void SaveTopic(int id)
         {
             var wsEvent = GetWorkShopEventById(id);
@@ -146,29 +113,6 @@ namespace DotVoter.Modules
             var update = MongoDB.Driver.Builders.Update.PushAllWrapped("Topics.$.Votes", vote);
 
             _eventRepository.Collection.Update(query, update);
-        }
-
-
-        private void UpdateChildDocument(Topic topic)
-        {
-            /*
-            //var vote = new Vote();
-            //var query = Query.EQ("Topics._id", topic.Id); 
-            //Update.Push()
-            //var update = Update.Set("Topics.$.Votes", vote); 
-            //collection.Update(query, update); 
-
-//You would probably want to do the update based on the student Id 
-//instead of Name, in case there was more than one Mark. 
-        
-                        // add it as a new attribute because it didn't exist
-            query = Query.EQ("_id", id);
-            update = Update.PushWrapped("bAttributeArray", new BAttribute { attribute = attribute, attributeValue = increment });
-            collection.Update(query, update);
-
-            
-            */
-
         }
 
     }
