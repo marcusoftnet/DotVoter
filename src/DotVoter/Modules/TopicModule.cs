@@ -48,41 +48,26 @@ namespace DotVoter.Modules
 
         private void DeletTopic(dynamic p)
         {
-            var topicId = p["topicid"];
-            var wsEvent = GetWorkShopEventById((int)p["id"]);
-
-            var topicToRemove = wsEvent.Topics.FirstOrDefault(t => t.Id == topicId);
-            if (topicToRemove != null)
-            {
-                var topic = wsEvent.Topics.FirstOrDefault(t => t.Id == topicId);
-                if (topic != null)
-                    wsEvent.Topics.Remove(topicToRemove);
-            }
-            Update(wsEvent);
+            var topicId = (int)p["topicid"];
+            var wsEventId = (int)p["id"];
+        
+            _eventRepository.Collection.Update(Query.EQ("_id", wsEventId),
+                  Update.PullWrapped("Topics", Query.EQ("_id", topicId)));
         }
 
         
         private void SaveTopic(int id)
         {
-            var wsEvent = GetWorkShopEventById(id);
             var topic = this.Bind<Topic>();
             
             topic.Id = _identityGenerator.GenerateId<Topic>(topic);
             topic.WorkshopEventId = id;
             topic.CreatedDate = DateTime.Now;
+            var query = Query.EQ("_id", id);
 
-            wsEvent.Topics.Add(topic);
-            Update(wsEvent);
-        }
+            var update = Update.PushWrapped("Topics", topic);
 
-        private void Update(WorkShopEvent wsEvent)
-        {
-            _eventRepository.Update(wsEvent);
-        }
-
-        private WorkShopEvent GetWorkShopEventById(int id)
-        {
-            return _eventRepository.GetById(id);
+            _eventRepository.Collection.Update(query, update);
         }
 
         protected void RemoveVoteFromTopic(dynamic p)
@@ -94,7 +79,7 @@ namespace DotVoter.Modules
 
             var query = Query.And(Query.EQ("_id", wsEventId), Query.EQ("Topics._id", topicId));
 
-            var update = MongoDB.Driver.Builders.Update.PullWrapped("Topics.$.Votes", vote);
+            var update = Update.PullWrapped("Topics.$.Votes", vote);
 
             _eventRepository.Collection.Update(query, update);
         }
@@ -110,7 +95,7 @@ namespace DotVoter.Modules
            
             var query = Query.And(Query.EQ("_id", wsEventId), Query.EQ("Topics._id", topicId));
 
-            var update = MongoDB.Driver.Builders.Update.PushAllWrapped("Topics.$.Votes", vote);
+            var update = Update.PushAllWrapped("Topics.$.Votes", vote);
 
             _eventRepository.Collection.Update(query, update);
         }
