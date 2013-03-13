@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
-using DotVoter.Models;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
@@ -30,7 +28,6 @@ namespace DotVoter.Infrastructure
 
         public MongoRepository()
         {
-            //var connectionString = ConfigurationManager.ConnectionStrings["MONGOHQ_URL"].ConnectionString;
             var connectionString = ConfigurationManager.AppSettings.Get("MONGOHQ_URL");
 
             var client = new MongoClient(connectionString); // connect to localhost
@@ -39,6 +36,7 @@ namespace DotVoter.Infrastructure
             var con = new MongoUrlBuilder(connectionString);
             var db = server.GetDatabase(con.DatabaseName);
             _collection = db.GetCollection<T>(typeof(T).Name.ToLower());
+            _collection.EnsureIndex("Topics._Id");
         }
         public MongoCollection<T> Collection
         {
